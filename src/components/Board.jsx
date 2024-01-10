@@ -1,19 +1,19 @@
 import { calculateWinner } from "../lib/calculateWinner";
 import Square from "./Square";
 
-export default function Board({onPlay,squares,xIsNext}) {
+export default function Board({ onPlay, squares, xIsNext, winner,currentMove }) {
 
-    const winner = calculateWinner(squares);
-    let status ;
-    if (winner){
-        status =`Winner : ${winner}`;
+    let status;
+
+    if (winner) {
+        status = `Winner : ${winner}`;
     }
     else {
-        status = "Next Player " + (xIsNext?"X":"O")
+        status = "Next Player is  " + (xIsNext ? "X" : "O")
     }
-
-    const handleClick =(i)=>{
-        if(squares[i] || calculateWinner(squares)){
+    if (currentMove === 9 && !winner) status = `None Win Game.`
+    const handleClick = (i) => {
+        if (squares[i] || calculateWinner(squares)) {
             return;
         }
         const nextSquares = squares.slice();
@@ -28,14 +28,14 @@ export default function Board({onPlay,squares,xIsNext}) {
         <>
             <div >{status}</div>
             <div className="flex">
-                <Square onSquareClick={()=>handleClick(0)} value={squares[0]} />
-                <Square onSquareClick={() =>handleClick(1)}  value={squares[1]}  />
-                <Square onSquareClick={() =>handleClick(2)}  value={squares[2]} />
+                <Square onSquareClick={() => handleClick(0)} value={squares[0]} />
+                <Square onSquareClick={() => handleClick(1)} value={squares[1]} />
+                <Square onSquareClick={() => handleClick(2)} value={squares[2]} />
             </div>
             <div className="flex">
                 <Square onSquareClick={() => handleClick(3)} value={squares[3]} />
                 <Square onSquareClick={() => handleClick(4)} value={squares[4]} />
-                <Square onSquareClick={() => handleClick(5)}  value={squares[5]} />
+                <Square onSquareClick={() => handleClick(5)} value={squares[5]} />
             </div>
             <div className="flex">
                 <Square onSquareClick={() => handleClick(6)} value={squares[6]} />
@@ -43,6 +43,6 @@ export default function Board({onPlay,squares,xIsNext}) {
                 <Square onSquareClick={() => handleClick(8)} value={squares[8]} />
             </div>
         </>
-        
+
     );
 }
