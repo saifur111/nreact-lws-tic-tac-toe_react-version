@@ -10,6 +10,20 @@ export default function Game(){
         setXIsNext(!xIsNext);
         setHistory([...history,nextSquares])
     }
+
+    const moves = history.map((squares,move)=>{
+        let desc;
+        if(move>0){
+            desc = `Go to the move # ${move}`
+        }else{
+            desc = `Start the Game.`
+        }
+        return(
+            <li>
+                <button>{desc}</button>
+            </li>
+        )
+    })
     return (
         <>
         <div>
@@ -17,7 +31,9 @@ export default function Game(){
                 <Board onPlay={handlePlay} squares={currentSqures} xIsNext={xIsNext}/>
             </div>
             <div>
-            
+                <ul>
+                    {moves}
+                </ul>
             </div>
         </div>
         </>
