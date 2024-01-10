@@ -1,16 +1,23 @@
 import { useState } from "react";
 import Board from "./Board";
+import History from "./History";
 export default function Game(){
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [xIsNext, setXIsNext] = useState(true);
+    const [currentMove, setCurrentMove] = useState(0);
 
-    const currentSqures =history[history.length-1];// history last push
+    const currentSqures =history[currentMove];// history last push
 
     const handlePlay = (nextSquares)=>{
         setXIsNext(!xIsNext);
-        setHistory([...history,nextSquares])
+        const nextHistory = [...history.slice(0,currentMove+1),nextSquares]
+        setHistory(nextHistory)
+        setCurrentMove(nextHistory.length-1);
     }
-
+    const jumpTo =(move)=>{
+        setCurrentMove(move);
+        setXIsNext(move%2 ===0);
+    }
     const moves = history.map((squares,move)=>{
         let desc;
         if(move>0){
@@ -19,21 +26,19 @@ export default function Game(){
             desc = `Start the Game.`
         }
         return(
-            <li>
-                <button>{desc}</button>
+            <li key={move} className="bg-gray-700 text-white mb-1 p-1 rounded-sm">
+                <button onClick={()=>jumpTo(move)}>{desc}</button>
             </li>
         )
     })
     return (
         <>
-        <div>
-            <div>
+        <div className="flex justify-center p-4">
+            <div className="mr-16">
                 <Board onPlay={handlePlay} squares={currentSqures} xIsNext={xIsNext}/>
             </div>
             <div>
-                <ul>
-                    {moves}
-                </ul>
+                <History moves={moves}/>
             </div>
         </div>
         </>
